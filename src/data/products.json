@@ -8,7 +8,7 @@
     "tag": "Best Seller",
     "tagType": "best seller",
     "features": ["Unlimited generation", "Brand voice presets", "SEO keyword support"],
-    "icon": "✍️"
+    "iconKey": "FiFeather"
   },
   {
     "id": 2,
@@ -19,7 +19,7 @@
     "tag": "Popular",
     "tagType": "popular",
     "features": ["2000+ templates", "Editable layers", "Commercial license"],
-    "icon": "🎨"
+    "iconKey": "FiLayers"
   },
   {
     "id": 3,
@@ -30,7 +30,7 @@
     "tag": "New",
     "tagType": "new",
     "features": ["10K+ assets", "Royalty-free use", "Fresh weekly drops"],
-    "icon": "📷"
+    "iconKey": "FiCamera"
   },
   {
     "id": 4,
@@ -41,7 +41,7 @@
     "tag": "Popular",
     "tagType": "popular",
     "features": ["50+ automations", "Workflow builder", "API access"],
-    "icon": "⚙️"
+    "iconKey": "FiSettings"
   },
   {
     "id": 5,
@@ -52,7 +52,7 @@
     "tag": "New",
     "tagType": "new",
     "features": ["ATS optimization", "Export to PDF", "Professional layouts"],
-    "icon": "📄"
+    "iconKey": "FiFileText"
   },
   {
     "id": 6,
@@ -63,6 +63,6 @@
     "tag": "Best Seller",
     "tagType": "best seller",
     "features": ["5000+ assets", "Content calendar", "Analytics dashboard"],
-    "icon": "📱"
+    "iconKey": "FiSmartphone"
   }
 ]
