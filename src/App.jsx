@@ -96,16 +96,17 @@ const faqCards = [
   },
 ]
 
-function SectionHeader({ eyebrow, title, text, titleClass = '', wide = false }) {
+function SectionHeader({ eyebrow, title, text, titleClass = '', wide = false, showEyebrow = true }) {
   return (
     <div className="mx-auto max-w-[1200px] px-5 text-center">
-      <span className="inline-flex items-center gap-2 rounded-full bg-[rgba(109,56,255,0.10)] px-3.5 py-2 text-sm font-bold tracking-[-0.02em] text-[#4f39f6] [font-family:var(--second-family)]">
-        {eyebrow}
-      </span>
+      {showEyebrow && (
+        <span className="inline-flex items-center gap-2 rounded-full bg-[rgba(109,56,255,0.10)] px-3.5 py-2 text-sm font-bold tracking-[-0.02em] text-[#4f39f6] [font-family:var(--second-family)]">
+          {eyebrow}
+        </span>
+      )}
       <h2
-        className={`mx-auto mt-3 mb-2 text-center text-[48px] font-extrabold capitalize leading-[1.15] tracking-[-0.05em] text-[#101727] max-md:text-[40px] ${
-          wide ? 'max-w-[16ch]' : 'max-w-[14ch]'
-        } ${titleClass}`}
+        className={`mx-auto mt-3 mb-2 text-center text-[48px] font-extrabold capitalize leading-[1.15] tracking-[-0.05em] text-[#101727] max-md:text-[40px] ${wide ? 'max-w-[16ch]' : 'max-w-[14ch]'
+          } ${titleClass}`}
       >
         {title}
       </h2>
@@ -153,8 +154,7 @@ function App() {
     toast.success('Checkout complete. Cart cleared.')
   }
 
-  const pageBg =
-    'bg-[radial-gradient(circle_at_top_left,rgba(109,56,255,0.10),transparent_28%),radial-gradient(circle_at_top_right,rgba(109,56,255,0.06),transparent_20%),linear-gradient(180deg,#ffffff_0%,#f7f8ff_100%)]'
+  const pageBg = 'bg-white'
   const uiFont = '[font-family:var(--second-family)]'
   const bodyFont = '[font-family:var(--font-family)]'
   const primaryBtn =
@@ -248,29 +248,29 @@ function App() {
         <section className="px-0 py-[88px]" id="products">
           <SectionHeader
             eyebrow="Premium Digital Tools"
-            title="Choose the tools that fit your workflow"
+            title="Premium Digital Tools"
             text="Explore a curated collection of digital products designed to help you work faster and create better results."
+            titleClass="whitespace-nowrap max-w-none max-md:whitespace-normal max-md:max-w-[14ch]"
+            showEyebrow={false}
           />
 
           <div className="mx-auto mt-7 flex max-w-[1200px] justify-center px-5">
             <div className="inline-flex rounded-full border border-slate-200 bg-white p-1 shadow-[0_10px_25px_rgba(16,23,39,0.04)]">
               <button
-                className={`rounded-full px-7 py-3.5 font-bold tracking-[-0.02em] transition ${uiFont} ${
-                  view === 'products'
+                className={`rounded-full px-7 py-3.5 font-bold tracking-[-0.02em] transition ${uiFont} ${view === 'products'
                     ? 'bg-gradient-to-r from-[#6d38ff] to-[#8f2bf7] text-white shadow-[0_14px_24px_rgba(79,57,246,0.24)]'
                     : 'bg-transparent text-[#101727]'
-                }`}
+                  }`}
                 type="button"
                 onClick={() => setView('products')}
               >
                 Products
               </button>
               <button
-                className={`rounded-full px-7 py-3.5 font-bold tracking-[-0.02em] transition ${uiFont} ${
-                  view === 'cart'
+                className={`rounded-full px-7 py-3.5 font-bold tracking-[-0.02em] transition ${uiFont} ${view === 'cart'
                     ? 'bg-gradient-to-r from-[#6d38ff] to-[#8f2bf7] text-white shadow-[0_14px_24px_rgba(79,57,246,0.24)]'
                     : 'bg-transparent text-[#101727]'
-                }`}
+                  }`}
                 type="button"
                 onClick={() => setView('cart')}
               >
@@ -332,11 +332,10 @@ function App() {
                     </ul>
 
                     <button
-                      className={`mt-5 w-full rounded-full px-6 py-3.5 font-bold tracking-[-0.02em] text-white transition ${uiFont} ${
-                        isAdded
+                      className={`mt-5 w-full rounded-full px-6 py-3.5 font-bold tracking-[-0.02em] text-white transition ${uiFont} ${isAdded
                           ? 'bg-gradient-to-r from-[#d946ef] to-[#8b5cf6]'
                           : 'bg-gradient-to-r from-[#6d38ff] to-[#8f2bf7]'
-                      }`}
+                        }`}
                       type="button"
                       onClick={() => addToCart(product)}
                     >
@@ -417,6 +416,7 @@ function App() {
             title="Get Started in 3 Steps"
             text="Pick your tools, add them to cart, and begin creating without a steep learning curve."
             wide
+            showEyebrow={false}
           />
 
           <div className="mx-auto mt-8 grid max-w-[1200px] gap-5 px-5 md:grid-cols-2 xl:grid-cols-3">
@@ -446,15 +446,16 @@ function App() {
             eyebrow="Pricing Plans"
             title="Simple, Transparent Pricing"
             text="Choose a plan that fits your work, your team, and your budget."
+            titleClass="whitespace-nowrap max-w-none max-md:whitespace-normal"
+            showEyebrow={false}
           />
 
           <div className="mx-auto mt-8 grid max-w-[1200px] gap-5 px-5 md:grid-cols-2 xl:grid-cols-3">
             {pricingPlans.map((plan) => (
               <article
                 key={plan.name}
-                className={`relative rounded-[24px] border border-slate-200 p-6 shadow-[0_14px_35px_rgba(16,23,39,0.05)] ${
-                  plan.featured ? 'bg-gradient-to-b from-[#6d38ff] to-[#8f2bf7] text-white -translate-y-2.5' : 'bg-white/95'
-                }`}
+                className={`relative rounded-[24px] border border-slate-200 p-6 shadow-[0_14px_35px_rgba(16,23,39,0.05)] ${plan.featured ? 'bg-gradient-to-b from-[#6d38ff] to-[#8f2bf7] text-white -translate-y-2.5' : 'bg-white/95'
+                  }`}
               >
                 {plan.featured && (
                   <span className={`absolute right-5 top-4 rounded-full bg-[rgba(255,255,255,0.16)] px-3 py-1 text-[0.76rem] font-extrabold text-white ${uiFont}`}>
@@ -475,18 +476,16 @@ function App() {
                   {plan.features.map((feature) => (
                     <li
                       key={feature}
-                      className={`relative pl-6 leading-6 before:absolute before:left-0 before:top-0 before:font-extrabold before:content-['✓'] ${
-                        plan.featured ? 'text-white/82 before:text-white' : 'text-slate-600 before:text-emerald-500'
-                      }`}
+                      className={`relative pl-6 leading-6 before:absolute before:left-0 before:top-0 before:font-extrabold before:content-['✓'] ${plan.featured ? 'text-white/82 before:text-white' : 'text-slate-600 before:text-emerald-500'
+                        }`}
                     >
                       {feature}
                     </li>
                   ))}
                 </ul>
                 <button
-                  className={`mt-6 w-full rounded-full px-6 py-3.5 font-bold tracking-[-0.02em] transition ${uiFont} ${
-                    plan.featured ? 'bg-white text-[#4f39f6]' : 'bg-gradient-to-r from-[#6d38ff] to-[#8f2bf7] text-white'
-                  }`}
+                  className={`mt-6 w-full rounded-full px-6 py-3.5 font-bold tracking-[-0.02em] transition ${uiFont} ${plan.featured ? 'bg-white text-[#4f39f6]' : 'bg-gradient-to-r from-[#6d38ff] to-[#8f2bf7] text-white'
+                    }`}
                   type="button"
                 >
                   {plan.button}
