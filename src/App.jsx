@@ -130,7 +130,6 @@ function App() {
 
     setCart((current) => [...current, product])
     setAddedIds((current) => [...current, product.id])
-    setView('cart')
     toast.success(`${product.name} added to cart`)
   }
 
