@@ -1,10 +1,30 @@
 import { useMemo, useState } from 'react'
-import { FiCamera, FiFileText, FiFeather, FiLayers, FiPackage, FiSettings, FiShoppingCart, FiSmartphone, FiUser, FiZap } from 'react-icons/fi'
+import {
+  FiCamera,
+  FiFeather,
+  FiFileText,
+  FiLayers,
+  FiPackage,
+  FiSettings,
+  FiShoppingCart,
+  FiSmartphone,
+  FiUser,
+  FiZap,
+} from 'react-icons/fi'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import heroImage from './assets/hero.png'
 import logoImage from './assets/logo.png'
 import products from './data/products.json'
+
+const toolIcons = {
+  FiFeather,
+  FiLayers,
+  FiCamera,
+  FiSettings,
+  FiFileText,
+  FiSmartphone,
+}
 
 const stats = [
   { value: '50K+', label: 'Active Users' },
@@ -61,78 +81,93 @@ const pricingPlans = [
   },
 ]
 
-const productIconMap = {
-  FiFeather,
-  FiLayers,
-  FiCamera,
-  FiSettings,
-  FiFileText,
-  FiSmartphone,
+const faqCards = [
+  {
+    title: 'Fast checkout',
+    text: 'Add a tool, review the cart, and complete checkout in a single view.',
+  },
+  {
+    title: 'Responsive design',
+    text: 'The whole layout adapts smoothly across desktop, tablet, and mobile screens.',
+  },
+  {
+    title: 'Toast feedback',
+    text: 'Add, remove, and checkout actions are confirmed with clean toast notifications.',
+  },
+]
+
+function SectionHeader({ eyebrow, title, text, titleClass = '', wide = false }) {
+  return (
+    <div className="mx-auto max-w-[1200px] px-5 text-center">
+      <span className="inline-flex items-center gap-2 rounded-full bg-[rgba(109,56,255,0.10)] px-3.5 py-2 text-sm font-bold tracking-[-0.02em] text-[#4f39f6] [font-family:var(--second-family)]">
+        {eyebrow}
+      </span>
+      <h2
+        className={`mx-auto mt-3 mb-2 text-center text-[48px] font-extrabold capitalize leading-[1.15] tracking-[-0.05em] text-[#101727] max-md:text-[40px] ${
+          wide ? 'max-w-[16ch]' : 'max-w-[14ch]'
+        } ${titleClass}`}
+      >
+        {title}
+      </h2>
+      <p className="mx-auto max-w-[620px] leading-7 text-slate-600">{text}</p>
+    </div>
+  )
 }
 
 function App() {
-  const [activeView, setActiveView] = useState('products')
-  const [cartItems, setCartItems] = useState([])
+  const [view, setView] = useState('products')
+  const [cart, setCart] = useState([])
   const [addedIds, setAddedIds] = useState([])
 
-  const cartCount = cartItems.length
-  const cartTotal = useMemo(() => cartItems.reduce((total, item) => total + item.price, 0), [cartItems])
+  const cartCount = cart.length
+  const cartTotal = useMemo(() => cart.reduce((sum, item) => sum + item.price, 0), [cart])
 
-  const handleAddToCart = (product) => {
-    const alreadySelected = cartItems.some((item) => item.id === product.id)
-
-    if (alreadySelected) {
+  const addToCart = (product) => {
+    if (cart.some((item) => item.id === product.id)) {
       toast.info(`${product.name} is already in the cart`)
       return
     }
 
-    setCartItems((current) => [...current, product])
+    setCart((current) => [...current, product])
     setAddedIds((current) => [...current, product.id])
-    setActiveView('cart')
+    setView('cart')
     toast.success(`${product.name} added to cart`)
   }
 
-  const handleRemoveItem = (productId) => {
-    const removedProduct = cartItems.find((item) => item.id === productId)
+  const removeFromCart = (productId) => {
+    const removed = cart.find((item) => item.id === productId)
 
-    setCartItems((current) => current.filter((item) => item.id !== productId))
+    setCart((current) => current.filter((item) => item.id !== productId))
     setAddedIds((current) => current.filter((id) => id !== productId))
 
-    if (removedProduct) {
-      toast.warning(`${removedProduct.name} removed from cart`)
-    }
+    if (removed) toast.warning(`${removed.name} removed from cart`)
   }
 
-  const handleCheckout = () => {
-    if (!cartItems.length) {
+  const clearCart = () => {
+    if (!cart.length) {
       toast.info('Your cart is already empty')
       return
     }
 
-    setCartItems([])
+    setCart([])
     setAddedIds([])
     toast.success('Checkout complete. Cart cleared.')
   }
 
-  const shellGradient =
+  const pageBg =
     'bg-[radial-gradient(circle_at_top_left,rgba(109,56,255,0.10),transparent_28%),radial-gradient(circle_at_top_right,rgba(109,56,255,0.06),transparent_20%),linear-gradient(180deg,#ffffff_0%,#f7f8ff_100%)]'
   const uiFont = '[font-family:var(--second-family)]'
   const bodyFont = '[font-family:var(--font-family)]'
-  const sectionTitleClass =
-    'text-center text-[48px] font-extrabold capitalize leading-[1.15] tracking-[-0.05em] text-[#101727] max-md:text-[40px]'
-  const heroTitleClass =
-    'max-w-[12ch] text-[72px] font-extrabold capitalize leading-[117%] tracking-[-0.06em] text-[#101727] max-md:text-[clamp(3rem,10vw,4.25rem)]'
-  const pillClass =
-    'inline-flex items-center gap-2 rounded-full bg-[rgba(109,56,255,0.10)] px-3.5 py-2 text-sm font-bold tracking-[-0.02em] text-[#4f39f6]'
-  const primaryButton =
+  const primaryBtn =
     'inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#6d38ff] to-[#8f2bf7] px-6 py-3.5 font-bold tracking-[-0.02em] text-white shadow-[0_14px_32px_rgba(79,57,246,0.22)] transition hover:opacity-95'
-  const secondaryButton =
+  const secondaryBtn =
     'inline-flex items-center justify-center rounded-full border border-[#8b5cf6]/30 bg-white px-6 py-3.5 font-bold tracking-[-0.02em] text-[#4f39f6] transition hover:bg-slate-50'
-  const cardClass =
-    'rounded-[24px] border border-slate-200 bg-white/95 shadow-[0_14px_35px_rgba(16,23,39,0.05)]'
+  const cardShell = 'rounded-[24px] border border-slate-200 bg-white/95 shadow-[0_14px_35px_rgba(16,23,39,0.05)]'
+  const heroTitle =
+    'max-w-[12ch] text-[72px] font-extrabold capitalize leading-[117%] tracking-[-0.06em] text-[#101727] max-md:text-[clamp(3rem,10vw,4.25rem)]'
 
   return (
-    <div className={`min-h-screen text-[#101727] ${bodyFont} ${shellGradient}`}>
+    <div className={`min-h-screen text-[#101727] ${bodyFont} ${pageBg}`}>
       <ToastContainer position="top-right" autoClose={1800} theme="colored" />
 
       <header className="sticky top-0 z-20 border-b border-black/5 bg-white/90 backdrop-blur-xl">
@@ -141,11 +176,11 @@ function App() {
             <img className="h-10 w-auto" src={logoImage} alt="DigiTools" />
           </a>
 
-          <nav className="hidden items-center gap-6 lg:flex" aria-label="Primary">
+          <nav className={`hidden items-center gap-6 lg:flex ${uiFont}`} aria-label="Primary">
             {['Products', 'Features', 'Pricing', 'Testimonials', 'FAQ'].map((item) => (
               <a
                 key={item}
-                className={`text-[15px] font-medium tracking-[-0.02em] text-slate-700 transition hover:text-[#4f39f6] ${uiFont}`}
+                className="text-[15px] font-medium tracking-[-0.02em] text-slate-700 transition hover:text-[#4f39f6]"
                 href={`#${item.toLowerCase()}`}
               >
                 {item}
@@ -160,13 +195,10 @@ function App() {
                 {cartCount}
               </span>
             </button>
-            <a
-              className={`hidden text-[15px] font-bold tracking-[-0.02em] text-slate-700 transition hover:text-[#4f39f6] sm:inline-flex ${uiFont}`}
-              href="#footer"
-            >
+            <a className={`hidden text-[15px] font-bold tracking-[-0.02em] text-slate-700 transition hover:text-[#4f39f6] sm:inline-flex ${uiFont}`} href="#footer">
               Login
             </a>
-            <a className={primaryButton} href="#pricing">
+            <a className={primaryBtn} href="#pricing">
               Get Started
             </a>
           </div>
@@ -177,18 +209,18 @@ function App() {
         <section className="px-0 pb-8 pt-16">
           <div className="mx-auto grid max-w-[1200px] items-center gap-11 px-5 lg:grid-cols-[1.05fr_0.95fr]">
             <div>
-              <span className={pillClass}>New · AI-Powered Tools Available</span>
-              <h1 className={`${heroTitleClass} mt-4 mb-4 ${uiFont}`}>
-                Supercharge Your Digital Workflow
-              </h1>
+              <span className={`inline-flex items-center gap-2 rounded-full bg-[rgba(109,56,255,0.10)] px-3.5 py-2 text-sm font-bold tracking-[-0.02em] text-[#4f39f6] ${uiFont}`}>
+                New · AI-Powered Tools Available
+              </span>
+              <h1 className={`${heroTitle} mt-4 mb-4 ${uiFont}`}>Supercharge Your Digital Workflow</h1>
               <p className="max-w-[620px] text-[1.08rem] leading-7 text-slate-600">
                 Access premium AI tools, design assets, templates, and productivity software in one place. Start creating faster with DigiTools.
               </p>
               <div className="mt-7 flex flex-wrap gap-3.5">
-                <a className={primaryButton} href="#products">
+                <a className={primaryBtn} href="#products">
                   Explore Products
                 </a>
-                <a className={secondaryButton} href="#pricing">
+                <a className={secondaryBtn} href="#pricing">
                   Watch Demo
                 </a>
               </div>
@@ -215,49 +247,46 @@ function App() {
         </section>
 
         <section className="px-0 py-[88px]" id="products">
-          <div className="mx-auto max-w-[1200px] px-5 text-center">
-            <span className={pillClass}>Premium Digital Tools</span>
-            <h2 className={`${sectionTitleClass} mt-3 mb-2 mx-auto max-w-[14ch]`}>
-              Choose the tools that fit your workflow
-            </h2>
-            <p className="mx-auto max-w-[620px] leading-7 text-slate-600">
-              Explore a curated collection of digital products designed to help you work faster and create better results.
-            </p>
-          </div>
+          <SectionHeader
+            eyebrow="Premium Digital Tools"
+            title="Choose the tools that fit your workflow"
+            text="Explore a curated collection of digital products designed to help you work faster and create better results."
+          />
 
           <div className="mx-auto mt-7 flex max-w-[1200px] justify-center px-5">
             <div className="inline-flex rounded-full border border-slate-200 bg-white p-1 shadow-[0_10px_25px_rgba(16,23,39,0.04)]">
               <button
                 className={`rounded-full px-7 py-3.5 font-bold tracking-[-0.02em] transition ${uiFont} ${
-                  activeView === 'products'
+                  view === 'products'
                     ? 'bg-gradient-to-r from-[#6d38ff] to-[#8f2bf7] text-white shadow-[0_14px_24px_rgba(79,57,246,0.24)]'
                     : 'bg-transparent text-[#101727]'
                 }`}
                 type="button"
-                onClick={() => setActiveView('products')}
+                onClick={() => setView('products')}
               >
                 Products
               </button>
               <button
                 className={`rounded-full px-7 py-3.5 font-bold tracking-[-0.02em] transition ${uiFont} ${
-                  activeView === 'cart'
+                  view === 'cart'
                     ? 'bg-gradient-to-r from-[#6d38ff] to-[#8f2bf7] text-white shadow-[0_14px_24px_rgba(79,57,246,0.24)]'
                     : 'bg-transparent text-[#101727]'
                 }`}
                 type="button"
-                onClick={() => setActiveView('cart')}
+                onClick={() => setView('cart')}
               >
                 Cart ({cartCount})
               </button>
             </div>
           </div>
 
-          {activeView === 'products' ? (
+          {view === 'products' ? (
             <div className="mx-auto mt-8 grid max-w-[1200px] gap-5 px-5 md:grid-cols-2 xl:grid-cols-3">
               {products.map((product) => {
+                const Icon = toolIcons[product.iconKey] || FiFeather
                 const isAdded = addedIds.includes(product.id)
-                const ProductIcon = productIconMap[product.iconKey] || FiFeather
-                const tagClass =
+
+                const tagStyle =
                   product.tagType === 'new'
                     ? 'bg-emerald-50 text-emerald-600'
                     : product.tagType === 'best seller'
@@ -265,13 +294,13 @@ function App() {
                       : 'bg-[rgba(109,56,255,0.12)] text-[#6d38ff]'
 
                 return (
-                  <article key={product.id} className={`${cardClass} relative p-5`}>
-                    <div className={`absolute right-4 top-4 rounded-full px-3 py-1 text-[0.76rem] font-extrabold ${tagClass} ${uiFont}`}>
+                  <article key={product.id} className={`${cardShell} relative p-5`}>
+                    <div className={`absolute right-4 top-4 rounded-full px-3 py-1 text-[0.76rem] font-extrabold ${tagStyle} ${uiFont}`}>
                       {product.tag}
                     </div>
 
-                    <div className="grid h-[52px] w-[52px] place-items-center rounded-[18px] bg-[rgba(109,56,255,0.10)] text-[1.55rem] text-[#4f39f6]">
-                      <ProductIcon aria-hidden="true" />
+                    <div className="grid h-[52px] w-[52px] place-items-center rounded-[18px] bg-[rgba(109,56,255,0.10)] text-[#4f39f6]">
+                      <Icon aria-hidden="true" />
                     </div>
 
                     <div className="mt-4">
@@ -310,7 +339,7 @@ function App() {
                           : 'bg-gradient-to-r from-[#6d38ff] to-[#8f2bf7]'
                       }`}
                       type="button"
-                      onClick={() => handleAddToCart(product)}
+                      onClick={() => addToCart(product)}
                     >
                       {isAdded ? 'Added to Cart' : 'Buy Now'}
                     </button>
@@ -319,16 +348,12 @@ function App() {
               })}
             </div>
           ) : (
-            <div className={`${cardClass} mx-auto mt-8 max-w-[1200px] px-5 py-7 md:px-8 md:py-8`}>
+            <div className={`${cardShell} mx-auto mt-8 max-w-[1200px] px-5 py-7 md:px-8 md:py-8`}>
               <div className="mb-5 flex items-start justify-between gap-5 max-md:flex-col">
                 <div>
-                  <h3 className={`text-[1.6rem] font-bold tracking-[-0.04em] text-[#101727] ${uiFont}`}>
-                    Your Cart
-                  </h3>
+                  <h3 className={`text-[1.6rem] font-bold tracking-[-0.04em] text-[#101727] ${uiFont}`}>Your Cart</h3>
                   <p className="mt-2 text-slate-600">
-                    {cartItems.length
-                      ? `${cartItems.length} selected product${cartItems.length > 1 ? 's' : ''}`
-                      : 'Your cart is empty right now.'}
+                    {cart.length ? `${cart.length} selected product${cart.length > 1 ? 's' : ''}` : 'Your cart is empty right now.'}
                   </p>
                 </div>
                 <div className="text-right max-md:text-left">
@@ -339,19 +364,19 @@ function App() {
                 </div>
               </div>
 
-              {cartItems.length ? (
+              {cart.length ? (
                 <>
                   <div className="grid gap-3.5">
-                    {cartItems.map((item) => {
-                      const CartIcon = productIconMap[item.iconKey] || FiFeather
+                    {cart.map((item) => {
+                      const Icon = toolIcons[item.iconKey] || FiFeather
 
                       return (
                         <article
                           key={item.id}
                           className="grid items-center gap-4 rounded-[18px] border border-slate-200 bg-[#f8faff] p-4 md:grid-cols-[auto_1fr_auto]"
                         >
-                          <div className="grid h-[54px] w-[54px] place-items-center rounded-full bg-white text-[1.4rem] text-[#4f39f6] shadow-[inset_0_0_0_1px_rgba(16,23,39,0.06)]">
-                            <CartIcon aria-hidden="true" />
+                          <div className="grid h-[54px] w-[54px] place-items-center rounded-full bg-white text-[#4f39f6] shadow-[inset_0_0_0_1px_rgba(16,23,39,0.06)]">
+                            <Icon aria-hidden="true" />
                           </div>
                           <div>
                             <h4 className={`text-[1.1rem] font-semibold tracking-[-0.04em] text-[#101727] ${uiFont}`}>
@@ -362,7 +387,7 @@ function App() {
                           <button
                             className="justify-start border-0 bg-transparent font-bold text-[#ff3f73] transition hover:opacity-80 md:justify-self-end"
                             type="button"
-                            onClick={() => handleRemoveItem(item.id)}
+                            onClick={() => removeFromCart(item.id)}
                           >
                             Remove
                           </button>
@@ -371,14 +396,14 @@ function App() {
                     })}
                   </div>
 
-                  <button className={`${primaryButton} mt-6 w-full`} type="button" onClick={handleCheckout}>
+                  <button className={`${primaryBtn} mt-6 w-full`} type="button" onClick={clearCart}>
                     Proceed to Checkout
                   </button>
                 </>
               ) : (
                 <div className="grid justify-items-center gap-4 py-6 text-center">
                   <p className="text-slate-600">No products have been added yet.</p>
-                  <button className={primaryButton} type="button" onClick={() => setActiveView('products')}>
+                  <button className={primaryBtn} type="button" onClick={() => setView('products')}>
                     Browse Products
                   </button>
                 </div>
@@ -388,27 +413,24 @@ function App() {
         </section>
 
         <section className="px-0 py-20" id="features">
-          <div className="mx-auto max-w-[1200px] px-5 text-center">
-            <span className={pillClass}>How It Works</span>
-            <h2 className={`${sectionTitleClass} mt-3 mb-2 mx-auto max-w-[16ch]`}>
-              Get Started in 3 Steps
-            </h2>
-            <p className="mx-auto max-w-[620px] leading-7 text-slate-600">
-              Pick your tools, add them to cart, and begin creating without a steep learning curve.
-            </p>
-          </div>
+          <SectionHeader
+            eyebrow="How It Works"
+            title="Get Started in 3 Steps"
+            text="Pick your tools, add them to cart, and begin creating without a steep learning curve."
+            wide
+          />
 
           <div className="mx-auto mt-8 grid max-w-[1200px] gap-5 px-5 md:grid-cols-2 xl:grid-cols-3">
             {stepCards.map((step) => {
-              const StepIcon = step.Icon
+              const Icon = step.Icon
 
               return (
-                <article key={step.number} className={`${cardClass} relative p-7 text-center`}>
+                <article key={step.number} className={`${cardShell} relative p-7 text-center`}>
                   <span className={`absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full bg-[rgba(109,56,255,0.10)] text-[0.76rem] font-extrabold text-[#4f39f6] ${uiFont}`}>
                     {step.number}
                   </span>
-                  <div className="mx-auto mb-4 grid h-[82px] w-[82px] place-items-center rounded-full bg-[rgba(109,56,255,0.10)] text-[2rem] text-[#4f39f6]">
-                    <StepIcon aria-hidden="true" />
+                  <div className="mx-auto mb-4 grid h-[82px] w-[82px] place-items-center rounded-full bg-[rgba(109,56,255,0.10)] text-[#4f39f6]">
+                    <Icon className="h-8 w-8" aria-hidden="true" />
                   </div>
                   <h3 className={`text-[1.15rem] font-semibold tracking-[-0.04em] text-[#101727] ${uiFont}`}>
                     {step.title}
@@ -421,15 +443,11 @@ function App() {
         </section>
 
         <section className="px-0 py-20" id="pricing">
-          <div className="mx-auto max-w-[1200px] px-5 text-center">
-            <span className={pillClass}>Pricing Plans</span>
-            <h2 className={`${sectionTitleClass} mt-3 mb-2 mx-auto max-w-[14ch]`}>
-              Simple, Transparent Pricing
-            </h2>
-            <p className="mx-auto max-w-[620px] leading-7 text-slate-600">
-              Choose a plan that fits your work, your team, and your budget.
-            </p>
-          </div>
+          <SectionHeader
+            eyebrow="Pricing Plans"
+            title="Simple, Transparent Pricing"
+            text="Choose a plan that fits your work, your team, and your budget."
+          />
 
           <div className="mx-auto mt-8 grid max-w-[1200px] gap-5 px-5 md:grid-cols-2 xl:grid-cols-3">
             {pricingPlans.map((plan) => (
@@ -447,9 +465,7 @@ function App() {
                 <h3 className={`text-[1.15rem] font-semibold tracking-[-0.04em] ${uiFont} ${plan.featured ? 'text-white' : 'text-[#101727]'}`}>
                   {plan.name}
                 </h3>
-                <p className={`mt-2 ${plan.featured ? 'text-white/82' : 'text-slate-600'}`}>
-                  {plan.subtitle}
-                </p>
+                <p className={`mt-2 ${plan.featured ? 'text-white/82' : 'text-slate-600'}`}>{plan.subtitle}</p>
                 <div className="mt-4 flex items-baseline gap-1.5">
                   <strong className={`text-[2.4rem] tracking-[-0.06em] ${uiFont} ${plan.featured ? 'text-white' : 'text-[#101727]'}`}>
                     {plan.price}
@@ -470,9 +486,7 @@ function App() {
                 </ul>
                 <button
                   className={`mt-6 w-full rounded-full px-6 py-3.5 font-bold tracking-[-0.02em] transition ${uiFont} ${
-                    plan.featured
-                      ? 'bg-white text-[#4f39f6]'
-                      : 'bg-gradient-to-r from-[#6d38ff] to-[#8f2bf7] text-white'
+                    plan.featured ? 'bg-white text-[#4f39f6]' : 'bg-gradient-to-r from-[#6d38ff] to-[#8f2bf7] text-white'
                   }`}
                   type="button"
                 >
@@ -507,12 +521,8 @@ function App() {
 
         <section className="px-0 py-8" id="faq">
           <div className="mx-auto grid max-w-[1200px] gap-5 px-5 md:grid-cols-3">
-            {[
-              { title: 'Fast checkout', text: 'Add a tool, review the cart, and complete checkout in a single view.' },
-              { title: 'Responsive design', text: 'The whole layout adapts smoothly across desktop, tablet, and mobile screens.' },
-              { title: 'Toast feedback', text: 'Add, remove, and checkout actions are confirmed with clean toast notifications.' },
-            ].map((item) => (
-              <article key={item.title} className="rounded-[24px] border border-slate-200 bg-white/95 p-6 shadow-[0_14px_35px_rgba(16,23,39,0.05)]">
+            {faqCards.map((item) => (
+              <article key={item.title} className={`${cardShell} p-6`}>
                 <h3 className={`mb-2 text-[1.15rem] font-semibold tracking-[-0.04em] text-[#101727] ${uiFont}`}>
                   {item.title}
                 </h3>
@@ -536,32 +546,56 @@ function App() {
 
           <div>
             <h4 className={`mb-3 font-semibold text-white ${uiFont}`}>Product</h4>
-            <a className="mt-2 block text-[#dbe2f1]/72 no-underline transition hover:text-white" href="#products">Products</a>
-            <a className="mt-2 block text-[#dbe2f1]/72 no-underline transition hover:text-white" href="#features">Features</a>
-            <a className="mt-2 block text-[#dbe2f1]/72 no-underline transition hover:text-white" href="#pricing">Pricing</a>
+            <a className="mt-2 block text-[#dbe2f1]/72 no-underline transition hover:text-white" href="#products">
+              Products
+            </a>
+            <a className="mt-2 block text-[#dbe2f1]/72 no-underline transition hover:text-white" href="#features">
+              Features
+            </a>
+            <a className="mt-2 block text-[#dbe2f1]/72 no-underline transition hover:text-white" href="#pricing">
+              Pricing
+            </a>
           </div>
 
           <div>
             <h4 className={`mb-3 font-semibold text-white ${uiFont}`}>Company</h4>
-            <a className="mt-2 block text-[#dbe2f1]/72 no-underline transition hover:text-white" href="#home">About</a>
-            <a className="mt-2 block text-[#dbe2f1]/72 no-underline transition hover:text-white" href="#faq">FAQ</a>
-            <a className="mt-2 block text-[#dbe2f1]/72 no-underline transition hover:text-white" href="#footer">Contact</a>
+            <a className="mt-2 block text-[#dbe2f1]/72 no-underline transition hover:text-white" href="#home">
+              About
+            </a>
+            <a className="mt-2 block text-[#dbe2f1]/72 no-underline transition hover:text-white" href="#faq">
+              FAQ
+            </a>
+            <a className="mt-2 block text-[#dbe2f1]/72 no-underline transition hover:text-white" href="#footer">
+              Contact
+            </a>
           </div>
 
           <div>
             <h4 className={`mb-3 font-semibold text-white ${uiFont}`}>Follow</h4>
-            <a className="mt-2 block text-[#dbe2f1]/72 no-underline transition hover:text-white" href="#home">Facebook</a>
-            <a className="mt-2 block text-[#dbe2f1]/72 no-underline transition hover:text-white" href="#home">LinkedIn</a>
-            <a className="mt-2 block text-[#dbe2f1]/72 no-underline transition hover:text-white" href="#home">X</a>
+            <a className="mt-2 block text-[#dbe2f1]/72 no-underline transition hover:text-white" href="#home">
+              Facebook
+            </a>
+            <a className="mt-2 block text-[#dbe2f1]/72 no-underline transition hover:text-white" href="#home">
+              LinkedIn
+            </a>
+            <a className="mt-2 block text-[#dbe2f1]/72 no-underline transition hover:text-white" href="#home">
+              X
+            </a>
           </div>
         </div>
 
         <div className="mx-auto mt-8 flex max-w-[1200px] flex-col gap-4 border-t border-white/10 px-5 pt-5 text-[#dbe2f1]/70 sm:flex-row sm:items-center sm:justify-between">
           <span>© 2026 DigiTools. All rights reserved.</span>
           <div className="flex gap-4">
-            <a className="no-underline transition hover:text-white" href="#home">Privacy</a>
-            <a className="no-underline transition hover:text-white" href="#home">Terms</a>
-            <a className="no-underline transition hover:text-white" href="#home">Cookies</a>
+            <a className="no-underline transition hover:text-white" href="#home">
+              Privacy
+            </a>
+            <a className="no-underline transition hover:text-white" href="#home">
+              Terms
+            </a>
+            <a className="no-underline transition hover:text-white" href="#home">
+              Cookies
+            </a>
           </div>
         </div>
       </footer>
