@@ -1,11 +1,13 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import 'tailwindcss';
 
 :root {
-  color-scheme: light;
-  --desi-saffron: #f59e0b;
-  --desi-green: #15803d;
-  --desi-cream: #fff7ed;
-  --desi-charcoal: #111827;
+  --4f39f6: #4f39f6;
+  --101727: #101727;
+  --627382: #627382;
+  --ffffff: #ffffff;
+  --font-family: 'Manrope', sans-serif;
+  --second-family: 'Inter', sans-serif;
 }
 
 html {
@@ -16,8 +18,30 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  font-family: var(--font-family);
+  color: var(--101727);
+  background: #ffffff;
+}
+
+body,
+button,
+a,
+input,
+textarea,
+select {
+  font-family: inherit;
 }
 
 * {
   box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
 }

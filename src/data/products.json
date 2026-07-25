@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1,
+    "name": "AI Writing Pro",
+    "description": "Create polished blogs, captions, and marketing copy with guided AI assistance.",
+    "price": 29,
+    "period": "monthly",
+    "tag": "Best Seller",
+    "tagType": "best seller",
+    "features": ["Unlimited generation", "Brand voice presets", "SEO keyword support"],
+    "icon": "✍️"
+  },
+  {
+    "id": 2,
+    "name": "Design Templates Pack",
+    "description": "Ready-made social, presentation, and ad templates for fast design output.",
+    "price": 49,
+    "period": "one-time",
+    "tag": "Popular",
+    "tagType": "popular",
+    "features": ["2000+ templates", "Editable layers", "Commercial license"],
+    "icon": "🎨"
+  },
+  {
+    "id": 3,
+    "name": "Premium Stock Assets",
+    "description": "High-quality photos, graphics, and icons for creative projects and campaigns.",
+    "price": 19,
+    "period": "monthly",
+    "tag": "New",
+    "tagType": "new",
+    "features": ["10K+ assets", "Royalty-free use", "Fresh weekly drops"],
+    "icon": "📷"
+  },
+  {
+    "id": 4,
+    "name": "Automation Toolkit",
+    "description": "Automate repetitive workflows, reminders, and content operations with ease.",
+    "price": 79,
+    "period": "yearly",
+    "tag": "Popular",
+    "tagType": "popular",
+    "features": ["50+ automations", "Workflow builder", "API access"],
+    "icon": "⚙️"
+  },
+  {
+    "id": 5,
+    "name": "Resume Builder Pro",
+    "description": "Build clean, recruiter-friendly resumes and cover letters in minutes.",
+    "price": 15,
+    "period": "one-time",
+    "tag": "New",
+    "tagType": "new",
+    "features": ["ATS optimization", "Export to PDF", "Professional layouts"],
+    "icon": "📄"
+  },
+  {
+    "id": 6,
+    "name": "Social Media Content Kit",
+    "description": "Plan, create, and schedule high-performing posts for every major platform.",
+    "price": 39,
+    "period": "monthly",
+    "tag": "Best Seller",
+    "tagType": "best seller",
+    "features": ["5000+ assets", "Content calendar", "Analytics dashboard"],
+    "icon": "📱"
+  }
+]
